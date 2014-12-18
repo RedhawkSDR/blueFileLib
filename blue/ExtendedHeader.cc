@@ -5,10 +5,12 @@
 namespace blue
 {
 
+	using utils::ESUCCESS;
 	using utils::ECORRUPTKEYWORDS;
 	
 	ExtendedHeader::ExtendedHeader() :
-	read_ascii_(false)
+	read_ascii_(false),
+	keyword_error_(ESUCCESS)
 	{
 	}
 
