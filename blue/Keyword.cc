@@ -287,7 +287,7 @@ namespace blue
 			return false;
 		}
 
-		for (int ii = 0; ii < MAX_KEYWORD_NAME_LENGTH; ++ii)
+		for (int ii = 1; ii < MAX_KEYWORD_NAME_LENGTH; ++ii)
 		{
 			if (!name[ii])
 			{
