@@ -196,7 +196,7 @@ namespace blue
 		T value;
 		std::istringstream ist(data);
 		ist >> value;
-		return setValue_(value, index);
+		return setValue_(index, value);
 	}
 
 	template <>
@@ -205,7 +205,7 @@ namespace blue
 		int value;
 		std::istringstream ist(data);
 		ist >> value;
-		return setValue_(value, index);
+		return setValue_(index, value);
 	}
 	
 	template <>
@@ -214,7 +214,7 @@ namespace blue
                 int value;
                 std::istringstream ist(data);
                 ist >> value;
-                return setValue_(value, index);
+                return setValue_(index, value);
         }
 
 	template <>
@@ -223,7 +223,7 @@ namespace blue
                 int value;
                 std::istringstream ist(data);
                 ist >> value;
-                return setValue_(value, index);
+                return setValue_(index, value);
         }
 
 	template <class T>
