@@ -1,3 +1,20 @@
+#
+# This file is protected by Copyright. Please refer to the COPYRIGHT file distributed with this 
+# source distribution.
+# 
+# This file is part of REDHAWK blueFileLib.
+# 
+# REDHAWK blueFileLib is free software: you can redistribute it and/or modify it under the terms of 
+# the GNU General Public License as published by the Free Software Foundation, either 
+# version 3 of the License, or (at your option) any later version.
+# 
+# REDHAWK blueFileLib is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR 
+# PURPOSE.  See the GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License along with this 
+# program.  If not, see http://www.gnu.org/licenses/.
+#
 SUBDIRS =	\
 		blue \
 	  	utils \
@@ -5,7 +22,14 @@ SUBDIRS =	\
 
 ACLOCAL_AMFLAGS = -I m4
 
-lib_LTLIBRARIES = libblueFileLib.la
+lib_LTLIBRARIES = libblueFileLib_v1.la
+
+libblueFileLib_v1_la_SOURCES = \
+libblue.la \
+libutils.la
+
+libblueFileLib_v1_la_LDFLAGS = -version-info 1:0:0
+
 libdir = $(spkg_libdir)
 
 pkgconfigdir = $(spkg_pkgconfig_dir)/
@@ -14,24 +38,20 @@ pkgconfig_DATA = blueFileLib_v1.pc
 xmldir = $(spkg_dir)/
 dist_xml_DATA = blueFileLib_v1.spd.xml
 
-
-datadir = $(spkg_impldir)
-
-incdir = $(spkg_includedir)
-
-libblueFileLib_la_SOURCES = \
-libblue.la \
-libutils.la
-
-dist_inc_DATA = \
-blue/*.h \
-utils/*.h
-
-libblueFileLib_la_LDFLAGS = -version-info 1:0:0
-
-libblueFileLib_la_LIBADD = \
-$(top_builddir)/blue/libblue.la \
-$(top_builddir)/utils/libutils.la
+incdir = $(spkg_includedir)/
+nobase_dist_inc_DATA = \
+blue/ByteSwap.h \
+blue/ExtendedHeader.h \
+blue/Format.h \
+blue/HeaderControlBlock.h \
+blue/InternalKeywordBase.h \
+blue/InternalKeyword.h \
+blue/Keyword.h \
+blue/MartesKey.h \
+blue/MidasKey.h \
+blue/UnitCode.h \
+utils/utilsByteSwap.h \
+utils/utilsError.h
 
 distclean-local:
 	rm -rf config.*
