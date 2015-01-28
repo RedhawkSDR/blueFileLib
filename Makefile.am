@@ -30,6 +30,10 @@ libutils.la
 
 libblueFileLib_v1_la_LDFLAGS = -version-info 1:0:0
 
+libblueFileLib_v1_la_LIBADD = \
+$(top_builddir)/blue/libblue.la \
+$(top_builddir)/utils/libutils.la
+
 libdir = $(spkg_libdir)
 
 pkgconfigdir = $(spkg_pkgconfig_dir)/

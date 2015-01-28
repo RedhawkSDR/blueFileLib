@@ -34,5 +34,5 @@ spkg_includedir=@spkg_includedir@
 Name: @PACKAGE_NAME@_@spkg_variation@
 Description: Libraries for use with component development supporting BLUE/PLATINUM files
 Version: @VERSION@
-Libs: -L${spkg_libdir} -lblueFileLib
+Libs: -L${spkg_libdir} -l@PACKAGE_NAME@_@spkg_variation@
 Cflags: -I${spkg_includedir}
