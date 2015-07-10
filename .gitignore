@@ -24,6 +24,5 @@ libtool
 ltmain.sh
 m4
 missing
-blueFileLib_v1.pc
-blueFileLib_v1.spd.xml
+rh.blueFileLib.pc
 stamp-h1
