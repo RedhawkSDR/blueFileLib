@@ -4,7 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: rh.blueFileLib
-Description: Library for reading and writing bluefiles
+Description: REDHAWK shared library for reading and writing bluefiles
 Requires: 
 Version: 2.0.0
 Libs: -L${libdir} -lblueFileLib
