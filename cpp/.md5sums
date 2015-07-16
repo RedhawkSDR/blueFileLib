@@ -1,7 +1,8 @@
+9c025118ce63c4c5471bf09b5a57d62d  rh.blueFileLib.pc.in
 c99df9fa4ab0cd042eac42fcee6441c3  reconf
 83272723d2884227a8e1393d67dbc133  include/blueFileLib.h
-35c7e8cfc8ac2cfa52417d01ee064eba  configure.ac
-323339be1d53e93c6c302de09571331d  Makefile.am
+184ee8bd693e1f9a759ee197a50183e1  configure.ac
+ff907efc0f435b5f3f5d65d3a2c579cf  Makefile.am
 a6f72a0a25f52fcb6c61a49238cfb249  Makefile.am.ide
 c61d47c1be52392fa80b408dae5b9ede  src/blueFileLib.cpp
 b87651ea3565402473fb088004430fbf  build.sh
