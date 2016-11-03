@@ -28,24 +28,49 @@
 namespace blue
 {
 	class Checksum;
-	const int BLUE_OFFSET=0;
-	const int DATA_ENDIANCE_OFFSET=8;
-	const int HEADER_ENDIANCE_OFFSET=4;
-	const int PIPE_OFFSET=20;
-	const int EXTSTART_OFFSET=24;
-	const int EXTSIZE_OFFSET =28;
-	const int FORMAT_OFFSET=52;
-	const int TYPECODE_OFFSET=48;
-	const int CRCSIZE_OFFSET=76;
-	const int KEYLEN_OFFSET=160;
-	const int KEYWORD_OFFSET=164;
 	
-	const int XDELTA_OFFSET=264;
-	const int XUNIT_OFFSET=272;
-	const int YUNIT_OFFSET=296;
-	
-	const int XSTART_OFFSET=256+0;
-	const int YSTART_OFFSET=256+24;
+	// FIXED HCB
+	//const int BLUE_OFFSET            =   0; //   0 (char4)   Header version
+	//const int HEADER_ENDIANCE_OFFSET =   4; //   4 (char4)   Header representation
+	//const int DATA_ENDIANCE_OFFSET   =   8; //   8 (char4)   Data representations
+	//const int DETACHED_OFFSET        =  12; //  12 (int4)    Detached header
+	//const int PROTECTED_OFFSET       =  16; //  16 (int4)    Protected from overwrite
+	//const int PIPE_OFFSET            =  20; //  20 (int4)    Pipe mode (N/A)
+	//const int EXTSTART_OFFSET        =  24; //  24 (int4)    Extended header start, in 512-byte blocks
+	//const int EXTSIZE_OFFSET         =  28; //  28 (int4)    Extended header size in bytes
+	//const int DATASTART_OFFSET       =  32; //  32 (real8)    Data start in bytes
+	//const int DATASIZE_OFFSET        =  40; //  40 (real8)    Data size in bytes
+	//const int TYPECODE_OFFSET        =  48; //  48 (int4)    File type code
+	//const int FORMAT_OFFSET          =  52; //  52 (char2)   Data format code
+	//const int FLAGMASK_OFFSET        =  54; //  54 (int2)     16-bit flagmask (1=flagbit)
+	//const int TIMECODE_OFFSET        =  56; //  56 (real8)    Time code field
+	//const int INLET_OFFSET           =  64; //  64 (int2)     Inlet owner
+	//const int OUTLEST_OFFSET         =  66; //  66 (int2)     Number of outlets
+	//const int OUTMASK_OFFSET         =  68; //  68 (int4)     Outlet async mask
+	//const int PIPELOC_OFFSET         =  72; //  72 (int4)     Pipe location
+	//const int PIPESIZE_OFFSET        =  76; //  76 (int4)    Pipe size in bytes
+	//const int INBYTE_OFFSET          =  80; //  80 (real8)    Next input byte
+	//const int OUTBYTE_OFFSET         =  88; //  88 (real8)    Next out byte (cumulative)
+	//const int OUTBYTES_OFFSET        =  96; //  96 (real8[8]) Next out byte (each outlet)
+	//const int KEYLEN_OFFSET          = 160; // 160 (int4)    Length of keyword string
+	//const int KEYWORD_OFFSET         = 164; // 164 (char92)  User defined keyword string
+	//const int ADJUNCT_OFFSET         = 256; // 256 (char256) Type-specific adjunct union (see below)
+
+	// TYPE 1000 and TYPE 2000 ADJUNCT HCB
+	//const int XSTART_OFFSET  = ADJUNCT_OFFSET +  0; // 256 (real8)   TYPE 1000: Abscissa value for first sample
+	//                                                //               TYPE 2000: Frame (row) starting value
+	//const int XDELTA_OFFSET  = ADJUNCT_OFFSET +  8; // 264 (real8)   TYPE 1000: Abscissa interval between samples
+	//                                                //               TYPE 2000: Increment between samples in frame
+	//const int XUNIT_OFFSET   = ADJUNCT_OFFSET + 16; // 272 (int4)    TYPE 1000: Units for abscissa values
+	//                                                //               TYPE 2000: Frame (row) units
+
+	// ADDITIONAL TYPE 2000 ADJUNCT HCB
+	//const int SUBSIZE_OFFSET = ADJUNCT_OFFSET + 20; // 276 (int4)    Number of data points per frame (row)
+	//const int YSTART_OFFSET  = ADJUNCT_OFFSET + 24; // 280 (real8)   Abscissa (column) start
+	//const int YDELTA_OFFSET  = ADJUNCT_OFFSET + 32; // 288 (real8)   Increment between frames
+	//const int YUNIT_OFFSET   = ADJUNCT_OFFSET + 40; // 296 (int4)    Abscissa (column) unit code
+	// NOTE: MIDAS docs say yunit offset is 36 instead of 40, which must be a typo
+	//       because ydelta could only be 4 bytes in that case.
 
 	const uint32_t IEEE = 0x49454545; // Represents local endiance as written
 	const uint32_t EEEI = 0x45454549; // Oposite of local endiance.
@@ -75,13 +100,13 @@ namespace blue
 
 	struct ADJUNCT_2000
 	{
-		double rowStart;
-		double rowDelta;
-		uint32_t rowUnits;
-		uint32_t columnRecs;
-		double columnStart;
-		double columnDelta;
-		uint32_t columnUnits;
+		double rowStart;      // xStart
+		double rowDelta;      // xDelta
+		uint32_t rowUnits;    // xUnits
+		uint32_t columnRecs;  // subsize
+		double columnStart;   // yStart
+		double columnDelta;   // yDelta
+		uint32_t columnUnits; // yUnits
 	};
 
 	struct ADJUNCT_3000
@@ -169,7 +194,7 @@ namespace blue
 		uint16_t   outLets;
 		uint32_t   outMask;
 		uint32_t   pipeLoc;
-		uint32_t   extCRCsize;
+		uint32_t   pipeSize;
 		union
 		{
 			double   inBytes;
@@ -177,13 +202,13 @@ namespace blue
 		};
 		union
 		{
-			double   outBytes;
-			int64_t  outBytes_I;
+			double   outByte;
+			int64_t  outByte_I;
 		};
 		union
 		{
-			double   outByte[8]; 
-			int64_t  outByte_I[8];
+			double   outBytes[8];
+			int64_t  outBytes_I[8];
 		};
 		int32_t    keywordLength; 
 		char       keyWords[92]; 
@@ -207,7 +232,7 @@ namespace blue
 		private:
 			hcb_s data_;
 			std::map<std::string, std::string> keywords_;
-			bool write_crc_;
+			//bool write_crc_; // TODO - this is never used, missing feature?
   
 		public:
 			HeaderControlBlock();
@@ -256,10 +281,10 @@ namespace blue
 			bool setColDelta(double delta);
 			bool setColUnits(int units);
 
-			double getColStart() const  {return data_.adjunct_2000.columnStart;}
-			double getColDelta() const  {return data_.adjunct_2000.columnDelta;}
-			int    getColUnits() const  {return data_.adjunct_2000.columnUnits;}
-			int    getColRecs()  const  {return data_.adjunct_2000.columnRecs; }
+			double getColStart() const  {return data_.adjunct_2000.columnStart;} // ystart
+			double getColDelta() const  {return data_.adjunct_2000.columnDelta;} // ydelta
+			int    getColUnits() const  {return data_.adjunct_2000.columnUnits;} // yunits
+			int    getColRecs()  const  {return data_.adjunct_2000.columnRecs; } // subsize
 
 			std::string getHdrVersion() const;
 

@@ -268,8 +268,6 @@ namespace blue
 
 	int HeaderControlBlock::validate(bool incomplete) const
 	{
-		bool valid;
-
 		if (!strncmp("OPEN", data_.dataRep, 4) || !strncmp("OPEN", data_.headerRep, 4))
 		{
 			return ENOTCLOSED;
@@ -322,15 +320,11 @@ namespace blue
 		{
 			return EINVALID_FORMAT;
 		}
-
-		valid = Format(data_.formatCode).isValid();
 		
-		if (false == valid)
+		if (!Format(data_.formatCode).isValid())
 		{
 			return EINVALID_FORMAT;
 		}
-		
-		std::string library;
 
 		switch (data_.typeCode/1000)
 		{
