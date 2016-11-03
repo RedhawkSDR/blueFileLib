@@ -78,6 +78,7 @@ namespace blue
 	{
 		memset(&data_, 0, HCB_SIZE);
 		memcpy(data_.version, "BLUE", 4);
+		memset(&data_.keyWords[1], 0x20, KEYWORD_SIZE-1); // Leave first byte as NULL (0), but pad rest of keywords with spaces (0x20)
 		data_.extSize   = 0xFFFFFFFF;
 		data_.extStart  = 0xFFFFFFFF;
 		data_.dataStart = 512.0;
