@@ -19,7 +19,7 @@ details.
 You should have received a copy of the GNU Lesser General Public License along
 with this program.  If not, see http://www.gnu.org/licenses/.
 -->
-<softpkg id="DCE:3fc557d1-c832-4748-baad-f893e6f21b23" name="rh.blueFileLib" type="2.0.0" version="2.0.2">
+<softpkg id="DCE:3fc557d1-c832-4748-baad-f893e6f21b23" name="rh.blueFileLib" type="2.0.0" version="2.1.0">
   <author/>
   <description>REDHAWK shared library for reading and writing bluefiles.</description>
   <implementation id="cpp">

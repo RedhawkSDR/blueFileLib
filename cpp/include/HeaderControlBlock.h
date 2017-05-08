@@ -265,8 +265,14 @@ namespace blue
 			const char *getFormatCode() const;
 			bool setFormatCode(Format formatCode);
 
+			// Add a single keyword. Return false if it doesn't fit.
+			bool addKeyword(const char *keyword, const std::string &value);
+			bool removeKeyword(const char *keyname);
 			std::vector<std::string> getKeywordNames() const;
 			std::string getKeywordValue(const std::string &name) const;
+			bool hasKeyword(const std::string &name) const;
+			void clearKeywords(); // Delete all keywords
+			int getKeywordLength() const  {return data_.keywordLength;}
 
 			bool setXstart(double start);
 			bool setXdelta(double delta);

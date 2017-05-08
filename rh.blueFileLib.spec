@@ -29,8 +29,8 @@
 %define _infodir       %{_prefix}/info
 
 Name:           rh.blueFileLib
-Version:        2.0.2
-Release:        1{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        REDHAWK shared library %{name}
 
 Group:          REDHAWK/Shared Libraries

@@ -354,6 +354,74 @@ namespace blue
 		return ESUCCESS;
 	}
 
+	void HeaderControlBlock::clearKeywords()
+	{
+		keywords_.clear();
+		data_.keywordLength=0;
+		// Make first byte NULL (0), but pad rest of keywords with spaces (0x20)
+		//memset(data_.keyWords, 0, KEYWORD_SIZE);
+		data_.keyWords[0] = 0;
+		memset(&data_.keyWords[1], 0x20, KEYWORD_SIZE-1);
+	}
+
+	bool HeaderControlBlock::hasKeyword(const std::string &name) const
+	{
+		return (!(keywords_.find(name) == keywords_.end()));
+	}
+
+	bool HeaderControlBlock::addKeyword(const char *keyword, const std::string &value)
+	{
+		std::string text = std::string(keyword) + '=' + value;
+		// +1 on LHS for keyword NULL termination
+		// -1 on RHS for keyword section NULL termination
+		if (text.size()+1+data_.keywordLength > KEYWORD_SIZE-1)
+		{
+			// New keyword won't fit!
+			return false;
+		}
+		// Insert into the blue header proper.
+		memcpy(data_.keyWords+data_.keywordLength, text.c_str(), text.size());
+		data_.keywordLength += text.size();
+		data_.keyWords[data_.keywordLength] = 0;   // NULL terminate each keyword
+		data_.keyWords[data_.keywordLength+1] = 0; // (double) NULL terminate end of keywords
+		++data_.keywordLength; // don't include second NULL termination in length of keywords
+		keywords_[keyword] = value;
+		return true;
+	}
+
+	// Remove keywords. Return false if the keyword doesn't exist.
+	//
+	// The keyword section is only 92 bytes at most, so we just rewrite all
+	// the keywords minus the one we're removing.
+	//
+	bool HeaderControlBlock::removeKeyword(const char *keyname)
+	{
+		std::map<std::string, std::string>::iterator index;
+		index = keywords_.find(keyname);
+		if (index == keywords_.end())
+		{
+			// Keyword does not exits.
+			return false;
+		}
+
+		keywords_.erase(index);
+		data_.keywordLength=0;
+		memset(data_.keyWords, 0, KEYWORD_SIZE);
+
+		int len=0;
+		for (index=keywords_.begin(); index != keywords_.end(); ++index)
+		{
+			std::string text = index->first + '=' + index->second;
+			memcpy(data_.keyWords+len, text.c_str(), text.size());
+			len+=text.size()+1; // +1 for NULL termination
+		}
+		data_.keywordLength = len;
+
+		// after double NULL termination, pad rest of keywords with spaces (0x20)
+		memset(&data_.keyWords[data_.keywordLength+1], 0x20, KEYWORD_SIZE-data_.keywordLength-1);
+		return true;
+	}
+
 	std::vector<std::string> HeaderControlBlock::getKeywordNames() const
 	{
 		std::vector<std::string> names;
