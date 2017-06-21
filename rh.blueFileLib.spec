@@ -29,8 +29,8 @@
 %define _infodir       %{_prefix}/info
 
 Name:           rh.blueFileLib
-Version:        2.0.2
-Release:        1%{?dist}
+Version:        2.0.1
+Release:        2%{?dist}
 Summary:        REDHAWK shared library %{name}
 
 Group:          REDHAWK/Shared Libraries
@@ -95,4 +95,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libblueFileLib.so
 %{_libdir}/pkgconfig
 %{_prefix}/include
+
+%changelog
+* Wed Jun 21 2017 Ryan Bauman <rbauman@lgsinnovations.com> - 2.0.1-2
+- Mass rebuild for REDHAWK 2.1.1
 
