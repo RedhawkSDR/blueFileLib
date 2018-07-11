@@ -216,4 +216,6 @@ trigger:
     - echo "Do not run global before_script" > /dev/null
   script:
     - gitlab-ci-trigger --file ${dependencies_url}
+  only:
+    - branches
   allow_failure: true
