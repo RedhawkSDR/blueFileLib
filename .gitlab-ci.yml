@@ -212,6 +212,8 @@ trigger:
   image: ${docker_registry}${trigger_repo}trigger:latest
   stage: trigger
   dependencies: []
+  before_script:
+    - echo "Do not run global before_script" > /dev/null
   script:
     - gitlab-ci-trigger --file ${dependencies_url}
   allow_failure: true
