@@ -30,7 +30,7 @@
 
 Name:           rh.blueFileLib
 Version:        2.1.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        REDHAWK shared library %{name}
 
 Group:          REDHAWK/Shared Libraries
